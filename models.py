@@ -1,6 +1,6 @@
 from extensions import app, db
 from datetime import datetime
-from flask_Login import UserMixin
+from flask_login import UserMixin
 from extensions import login_manager
 
 

@@ -6,7 +6,7 @@ from players import players
 from models import User, Post, Comment, Vote, Follower
 #from data import new_user
 from extensions import db
-from flask_Login import logout_user, login_user, current_user, login_required
+from flask_login import logout_user, login_user, current_user, login_required
 import os
 from werkzeug.utils import secure_filename
 from operator import add

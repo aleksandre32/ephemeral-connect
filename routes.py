@@ -215,15 +215,12 @@ def unfollow(username):
 def search():
     form = SearchForm()
     users = []
-    print("aleqds")
     #if form.validate_on_submit():
     query = form.query.data
     if not query:
         users = []
     else:        
         users = User.query.filter(User.user_name.ilike(f'%{query}%')).all()
-    print(f"Search query: {query}")  
-    print(f"Found users: {users}")  
     return render_template('search.html', form=form, users=users)
 
 
@@ -242,4 +239,16 @@ def profile(username):
     
     return render_template('profile.html', user=user, posts=recent_entries, is_following=is_following)
 
+
+
+
+@app.route('/delete_post/<int:post_id>', methods=['POST'])
+@login_required
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    if post.user != current_user:
+        return redirect(url_for('profile', username=post.user.user_name))
+    db.session.delete(post)
+    db.session.commit()
+    return redirect(url_for('profile', username=post.user.user_name))
 

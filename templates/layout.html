@@ -17,7 +17,7 @@
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="https://www.tbceducation.ge/"><img src="static\tbc-logo.png" height="45px" width="45"></a>
+          <a class="navbar-brand" href="https://www.tbceducation.ge/"><img src="..\static\tbc-logo.png" height="45px" width="45"></a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -25,18 +25,18 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
                 {% if current_user.is_authenticated %}
-                <a class="nav-link active" aria-current="page" href="/home">Home</a>
+                <a class="nav-link {% if request.endpoint == 'index' %}active {% endif %}" aria-current="page" href="/home">Home</a>
                 {% else %}
                 
-                <a class="nav-link active" aria-current="page" href="/login">Home</a>
+                <a class="nav-link {% if request.endpoint == 'index' %}active {% endif %}" aria-current="page" href="/login">Home</a>
                 
                 {% endif %}
               </li>
               <li class="nav-item">
                 {% if current_user.is_authenticated %}
-                <a class="nav-link" href="/following">following</a>
+                <a class="nav-link {% if request.endpoint == 'friend' %}active {% endif %}" href="/following">following</a>
                 {% else %}
-                <a class="nav-link" href="/login">following</a>
+                <a class="nav-link {% if request.endpoint == 'friend' %}active {% endif %}" href="/login">following</a>
                 {% endif %}
               </li>
               <li class="nav-item">
@@ -44,7 +44,7 @@
               </li>
               {% if current_user.is_authenticated %}
               <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('profile', username=current_user.user_name)}}">Profile</a>
+                  <a class="nav-link {% if request.endpoint == 'profile' %}active {% endif %}" href="{{ url_for('profile', username=current_user.user_name)}}">Profile</a>
               </li>
               <li class="nav-item">
                 <form class="d-flex" role="search" action="{{ url_for('search') }}" method="POST">

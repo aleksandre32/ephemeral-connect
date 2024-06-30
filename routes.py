@@ -252,3 +252,46 @@ def delete_post(post_id):
     db.session.commit()
     return redirect(url_for('profile', username=post.user.user_name))
 
+
+
+
+
+@app.route('/admin')
+@login_required
+def admin():
+    if current_user.role != 'admin':
+        flash('You do not have access to this page.', 'danger')
+        return redirect(url_for('index'))
+    users = User.query.all()
+    posts = Post.query.order_by(Post.created_at.desc()).all()
+    return render_template('admin.html', users=users, posts=posts)
+
+
+@app.route('/delete_user/<int:user_id>', methods=['POST'])
+@login_required
+def delete_user(user_id):
+    if current_user.role != 'admin':
+        flash('You do not have access to this action.', 'danger')
+        return redirect(url_for('index'))
+    user = User.query.get_or_404(user_id)
+    if user.role == 'admin':
+        flash('You cannot delete another admin.', 'danger')
+        return redirect(url_for('admin'))
+    db.session.delete(user)
+    db.session.commit()
+    flash('The user has been deleted.', 'success')
+    return redirect(url_for('admin'))
+
+
+
+
+@app.route('/delete_post_admin/<int:post_id>', methods=['POST'])
+@login_required
+def delete_post_admin(post_id):
+    if current_user.role != 'admin':
+        flash('You do not have access to this action.', 'danger')
+        return redirect(url_for('index'))
+    post = Post.query.get_or_404(post_id)
+    db.session.delete(post)
+    db.session.commit()
+    return redirect(url_for('admin'))

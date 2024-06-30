@@ -12,6 +12,7 @@
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Username</th>
+                <th scope="col">password</th>
                 <th scope="col">Role</th>
                 <th scope="col">Actions</th>
             </tr>
@@ -20,8 +21,8 @@
             {% for user in users %}
             <tr>
                 <th scope="row">{{ user.id }}</th>
-                <td>{{ user.username }}</td>
-                <td>{{ user.email }}</td>
+                <td>{{ user.user_name }}</td>
+                <td>{{ user.password }}</td>
                 <td>{{ user.role }}</td>
                 <td>
                     {% if user.role != 'admin' %}
@@ -40,8 +41,6 @@
         <thead>
             <tr>
                 <th scope="col">ID</th>
-                <th scope="col">Title</th>
-                <th scope="col">Body</th>
                 <th scope="col">Author</th>
                 <th scope="col">Timestamp</th>
                 <th scope="col">Actions</th>
@@ -51,9 +50,7 @@
             {% for post in posts %}
             <tr>
                 <th scope="row">{{ post.id }}</th>
-                <td>{{ post.title }}</td>
-                <td>{{ post.body }}</td>
-                <td>{{ post.user.username }}</td>
+                <td>{{ post.user.user_name }}</td>
                 <td>{{ post.created_at}}</td>
                 <td>
                     <form action="{{ url_for('delete_post_admin', post_id=post.id) }}" method="POST" class="d-inline">

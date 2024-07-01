@@ -55,7 +55,7 @@ class Post(db.Model):
     downvote_count = db.Column(db.Integer, default=0)
     user = db.relationship('User', backref=db.backref('posts', lazy=True, cascade="all, delete-orphan"))
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    comments = db.relationship('Comment', backref='post', lazy=True)
+    comments = db.relationship('Comment', backref='post', lazy=True, cascade='all, delete-orphan',)
 
    
     

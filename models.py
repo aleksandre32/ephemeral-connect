@@ -8,8 +8,16 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_name = db.Column(db.String, unique=True)
     password = db.Column(db.String)
+    role = db.Column(db.String, default = 'guest')
     followers = db.relationship('Follower', foreign_keys='Follower.followed_id', backref='followed', lazy='dynamic')
     followed = db.relationship('Follower', foreign_keys='Follower.follower_id', backref='follower', lazy='dynamic')
+    
+   
+
+    def __init__(self, user_name, password, role = 'guest'):
+        self.user_name=user_name
+        self.password=password
+        self.role = role
 
     def is_following(self, user):
         return self.followed.filter_by(followed_id=user.id).first() is not None
@@ -93,6 +101,23 @@ class Vote(db.Model):
 
 
 
-if __name__ == "__main__": 
+
+
+
+
+
+if __name__ == "__main__":
     with app.app_context():
         db.create_all()
+
+
+
+        admin = User(user_name="admin", password="123456", role="admin")
+
+
+        db.session.add(admin)
+        db.session.commit()
+
+    
+
+    

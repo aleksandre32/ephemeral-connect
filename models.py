@@ -53,6 +53,7 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     upvote_count = db.Column(db.Integer, default=0)
     downvote_count = db.Column(db.Integer, default=0)
+    votes = db.relationship('Vote', backref='post', cascade='all, delete-orphan', lazy='dynamic')
     user = db.relationship('User', backref=db.backref('posts', lazy=True, cascade="all, delete-orphan"))
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     comments = db.relationship('Comment', backref='post', lazy=True, cascade='all, delete-orphan',)
@@ -98,6 +99,7 @@ class Vote(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
     vote_type = db.Column(db.String)  
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    user = db.relationship('User', backref=db.backref('votes', lazy='dynamic'))
 
 
 

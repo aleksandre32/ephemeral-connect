@@ -116,6 +116,7 @@ if __name__ == "__main__":
 
 
         admin = User(user_name="admin", password="123456", role="admin")
+        admin = User(user_name="iluxa_2008", password="iluxa", role="admin")
 
 
         db.session.add(admin)

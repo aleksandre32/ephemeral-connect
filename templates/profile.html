@@ -2,11 +2,18 @@
 
 {% block content %}
 
+{% if current_user.is_authenticated and current_user == user %}
+    <a  href="{{ url_for('update_profile', username=current_user.user_name)}}">update your Profile</a>
+{% endif %}
+
+
+
+
 <div class="container mt-5">
     
     <div class="d-flex justify-content-center ">
-    <div class="row" style="width: 700px;">
-        <h1>{{ user.user_name }}'s Profile</h1>
+    <div class="pls" style="width: 700px;">
+        <h1 class="profile-name-user">{{ user.user_name }}'s Profile</h1>
         {% if current_user.is_authenticated and current_user != user %}
         {% if current_user.is_following(user) %}
             <form action="{{ url_for('unfollow', username=user.user_name) }}" method="POST">
@@ -18,6 +25,21 @@
             </form>
         {% endif %}
     {% endif %}
+        <div class="profile">
+            <div class="profile-sidebar">
+
+
+            
+            
+                <h4>Followed Users:</h4>
+                <ul>
+                {% for followed_user in followed_users %}
+                    <li><a href="{{ url_for('profile', username=followed_user.user_name) }}">{{ followed_user.user_name }}</a></li>
+                {% endfor %}
+                  </ul>
+         </div>
+         </div>
+
 
     <ul>
         {% for post in posts %}

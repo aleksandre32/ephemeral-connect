@@ -11,6 +11,7 @@ class User(db.Model, UserMixin):
     role = db.Column(db.String, default = 'guest')
     followers = db.relationship('Follower', foreign_keys='Follower.followed_id', backref='followed', lazy='dynamic')
     followed = db.relationship('Follower', foreign_keys='Follower.follower_id', backref='follower', lazy='dynamic')
+    profile_image = db.Column(db.String(120), nullable=True)
     
    
 

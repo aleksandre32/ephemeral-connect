@@ -1,7 +1,7 @@
 from extensions import app
 from flask import  render_template,  redirect, url_for, request, flash, send_from_directory, abort, jsonify
 from sqlalchemy import or_
-from forms import RegisterForm, LoginForm, PostForm, CommentForm, ReplyForm,  SearchForm
+from forms import RegisterForm, LoginForm, PostForm, CommentForm, ReplyForm,  SearchForm, UpdateProfileForm
 from players import players
 from models import User, Post, Comment, Vote, Follower
 #from data import new_user
@@ -234,10 +234,10 @@ def profile(username):
     
     
     recent_entries = db.session.query(Post).filter(Post.created_at >= yesterday).filter(Post.user == user).all()
-
+    followed_users = User.query.join(Follower, Follower.followed_id == User.id).filter(Follower.follower_id == user.id).all()
 
     
-    return render_template('profile.html', user=user, posts=recent_entries, is_following=is_following)
+    return render_template('profile.html', user=user, posts=recent_entries, is_following=is_following, followed_users=followed_users)
 
 
 
@@ -295,3 +295,27 @@ def delete_post_admin(post_id):
     db.session.delete(post)
     db.session.commit()
     return redirect(url_for('admin'))
+
+
+
+@app.route('/updateprofile/<username>', methods=['GET', 'POST'])
+@login_required
+def update_profile(username):
+    user = User.query.filter_by(user_name=username).first_or_404()
+    form = UpdateProfileForm()
+
+    if form.validate_on_submit():
+        if form.profile_image.data:
+            filename = secure_filename(form.profile_image.data.filename)
+            form.profile_image.data.save(os.path.join('static/profile_pictures', filename))
+            user.profile_image = filename
+        user.user_name = form.username.data
+        db.session.commit()
+        flash('Your profile has been updated.', 'success')
+        return redirect(url_for('profile', username=user.user_name))
+    elif request.method == 'GET':
+        form.username.data = user.user_name
+
+
+    
+    return render_template('updateprofile.html', user=user, form=form)

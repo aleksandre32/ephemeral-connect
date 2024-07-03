@@ -1,11 +1,13 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField, PasswordField, FileField,TextAreaField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, ValidationError
 from flask_wtf.file import FileField, FileAllowed
+from models import User
+from flask_login import current_user
 
-    # def __str__(self):
-        # return f"{self.name}"
-    
+
+
+
 
 class RegisterForm(FlaskForm):
     username = StringField(label="username")
@@ -33,3 +35,15 @@ class ReplyForm(FlaskForm):
 class SearchForm(FlaskForm):
     query = StringField('Search for Users', validators=[DataRequired()])
     submit = SubmitField('Search')
+
+
+
+class UpdateProfileForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    profile_image = FileField('Profile Image', validators=[FileAllowed(['jpg', 'png'])])
+    submit = SubmitField('Update')
+
+    def validate_username(self, username):
+        user = User.query.filter_by(user_name=username.data).first()
+        if user and user.id != current_user.id:
+            raise ValidationError('Username already taken.')

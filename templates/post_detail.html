@@ -38,12 +38,12 @@
             {% for comment in comments %}
     <div>
         <h4>{{ comment.text }}</h4>
-        <small>By {{ comment.user.user_name }} at {{ comment.created_at }}</small>
+        <small class="reply-time">By {{ comment.user.user_name }} at {{ comment.created_at }}</small>
 
         {% for reply in comment.replies %}
             <div style="margin-left: 20px;">
-                <p>{{ reply.text }}</p>
-                <small>By {{ reply.user.user_name }} at {{ reply.created_at }}</small>
+                <p class="reply-text">{{ reply.text }}</p>
+                <small class="reply-time">By {{ reply.user.user_name }} at {{ reply.created_at }}</small>
             </div>
         {% endfor %}
         <form method="POST" action="{{ url_for('post_detail', post_id=post.id) }}">
@@ -52,16 +52,16 @@
                 {{ reply_form.text.label }} {{ reply_form.text(class_='reply-box') }}
             </div>
             <input type="hidden" name="parent_id" value="{{ comment.id }}">
-            <button type="submit" name="reply">Reply</button>
+            <button type="submit" name="reply" class="reply-button">Reply</button>
         </form>
     </div>
 {% endfor %}
 
-<h3>Add a Comment</h3>
+<h3 style="font-style: italic;">Add a Comment</h3>
 <form method="POST" action="{{ url_for('post_detail', post_id=post.id) }}">
     {{ form.hidden_tag() }}
     {{ form.text.label }} {{ form.text() }}
-    <button type="submit" name="comment">Comment</button>
+    <button type="submit" name="comment" class="comment-button">Comment</button>
 </form>
 <a href="{{ url_for('index') }}">Back to Posts</a>
 </div>
